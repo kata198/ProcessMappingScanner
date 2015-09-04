@@ -1,5 +1,5 @@
 # ProcessMappingScanner
-Python module for scanning running process mappings (for detecting libraries, executables, etc)
+Python module for scanning running process mappings (for detecting libraries, executables, etc), and open files.
 
 This module works on UNIX-derived systems only (Linux, BSD, etc)
 
