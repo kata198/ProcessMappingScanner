@@ -20,6 +20,8 @@ except:
     FileNotFoundError = IOError
     PermissionError = IOError
 
+__version__ = '2.0.1'
+__version_tuple__ = (2, 0, 1)
 
 def getProcessOwner(pid):
     '''
@@ -30,7 +32,7 @@ def getProcessOwner(pid):
         @return - None if process not found or can't be determined. Otherwise, a dict: 
             {
                 uid  - Owner UID
-                name - Owner name, or None if one cannot be determined (can happen with nfs exports, etc)
+                name - Owner name, or None if one cannot be determined
             }
     '''
     try:
@@ -106,18 +108,19 @@ def getAllRunningPids():
     return [int(x) for x in os.listdir('/proc') if x.isdigit()]
 
         
-def scanProcessForMapping(pid, searchPortion):
+def scanProcessForMapping(pid, searchPortion, isExactMatch=False):
     '''
         scanProcessForMapping - Searches a given pid's mappings for a certain pattern.
 
             @param pid <int> - A running process ID on this system
             @param searchPortion <str> - A mapping for which to search, example: libc or python or libz.so.1. Give empty string to return all mappings.
+            @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default False.
 
             @return <dict> - If result is found, the following dict is returned. If no match found on the given pid, or pid is not found running, None is returned.
                 {
                     'searchPortion' : The passed search pattern
                     'pid'           : The passed pid (as an integer)
-                    'owner'         : String of owner, or uid if no mapping can be found, or "unknown" if neither could be determined.
+                    'owner'         : String of process owner, or uid if no mapping can be found, or "unknown" if neither could be determined.
                     'cmdline'       : Commandline string
                     'matchedMappings' : All mappings likes that matched the given search pattern
                 }
@@ -135,9 +138,18 @@ def scanProcessForMapping(pid, searchPortion):
 
         lines = contents.split('\n')
         matchedMappings = []
-        for line in lines:
-            if searchPortion in line:
-                matchedMappings.append('\t' + line)
+    
+        if isExactMatch is True:
+            for line in lines:
+                portion = ' '.join(line.split(' ')[5:]).lstrip()
+                if searchPortion == portion:
+                    matchedMappings.append('\t' + line)
+        else:
+            for line in lines:
+                if searchPortion in line:
+                    matchedMappings.append('\t' + line)
+
+
         if len(matchedMappings) == 0:
             return None
 
@@ -162,16 +174,19 @@ def scanProcessForMapping(pid, searchPortion):
         return None
 
 
-def scanAllProcessesForMapping(searchPortion):
+def scanAllProcessesForMapping(searchPortion, isExactMatch=False):
     '''
         scanAllProcessesForMapping - Scans all processes on the system for a given search pattern.
+
+            @param searchPortion <str> - A mapping for which to search, example: libc or python or libz.so.1. Give empty string to return all mappings.
+            @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed.
 
         @return - <dict> - A dictionary of pid -> mappingResults for each pid that matched the search pattern. For format of "mappingResults", @see scanProcessForMapping
     '''
     pids = getAllRunningPids()
 
     # Since processes could disappear, we run the scan as fast as possible here with a list comprehension, then assemble the return dictionary later.
-    mappingResults = [scanProcessForMapping(pid, searchPortion) for pid in pids]
+    mappingResults = [scanProcessForMapping(pid, searchPortion, isExactMatch) for pid in pids]
     ret = {}
     for i in range(len(pids)):
         if mappingResults[i] is not None:
@@ -182,19 +197,21 @@ def scanAllProcessesForMapping(searchPortion):
 scanAllProcessessForMapping = scanAllProcessesForMapping # Backwards compat with typo, will be kept for one release.       
 
 
-def scanProcessForOpenFile(pid, filename):
+def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True):
     '''
-        scanProcessForOpenFile - Scans open FDs for a given pid to see if any are the provided filename
+        scanProcessForOpenFile - Scans open FDs for a given pid to see if any are the provided searchPortion
 
-        @param filename <str> - Filename to check
+            @param searchPortion <str> - Filename to check
+            @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default True.
 
         @return -  If result is found, the following dict is returned. If no match found on the given pid, or the pid is not found running, None is returned.
                 {
-                    'filename'      : The filename provided
+                    'searchPortion' : The search portion provided
                     'pid'           : The passed pid (as an integer)
-                    'owner'         : String of owner, or "unknown" if one could not be determined
+                    'owner'         : String of process owner, or "unknown" if one could not be determined
                     'cmdline'       : Commandline string
                     'fds'           : List of file descriptors assigned to this file (could be mapped several times)
+                    'filenames'     : List of the filenames matched
                 }
     '''
     try:
@@ -209,11 +226,20 @@ def scanProcessForOpenFile(pid, filename):
         processFDs = os.listdir(prefixDir)
 
         matchedFDs = []
+        matchedFilenames = []
 
-        for fd in processFDs:
-            fdPath = os.readlink(prefixDir + '/' + fd)
-            if fdPath == filename:
-                matchedFDs.append(fd)
+        if isExactMatch is True:
+            for fd in processFDs:
+                fdPath = os.readlink(prefixDir + '/' + fd)
+                if searchPortion == fdPath:
+                    matchedFDs.append(fd)
+                    matchedFilenames.append(fdPath)
+        else:
+            for fd in processFDs:
+                fdPath = os.readlink(prefixDir + '/' + fd)
+                if searchPortion in fdPath:
+                    matchedFDs.append(fd)
+                    matchedFilenames.append(fdPath)
 
         if len(matchedFDs) == 0:
             return None
@@ -222,11 +248,12 @@ def scanProcessForOpenFile(pid, filename):
         owner   = getProcessOwnerStr(pid)
             
         return {
-            'filename' : filename,
-            'pid'      : pid,
-            'owner'    : owner,
-            'cmdline'  : cmdline,
-            'fds'      : matchedFDs,
+            'searchPortion' : searchPortion,
+            'pid'           : pid,
+            'owner'         : owner,
+            'cmdline'       : cmdline,
+            'fds'           : matchedFDs,
+            'filenames'     : matchedFilenames, 
         }
 
 
@@ -241,16 +268,19 @@ def scanProcessForOpenFile(pid, filename):
         return None
 
 
-def scanAllProcessesForOpenFile(filename):
+def scanAllProcessesForOpenFile(searchPortion, isExactMatch=True):
     '''
         scanAllProcessessForOpenFile - Scans all processes on the system for a given filename
+
+            @param searchPortion <str> - Filename to check
+            @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default True.
 
         @return - <dict> - A dictionary of pid -> mappingResults for each pid that matched the search pattern. For format of "mappingResults", @see scanProcessForOpenFile
     '''
     pids = getAllRunningPids()
 
     # Since processes could disappear, we run the scan as fast as possible here with a list comprehension, then assemble the return dictionary later.
-    mappingResults = [scanProcessForOpenFile(pid, filename) for pid in pids]
+    mappingResults = [scanProcessForOpenFile(pid, searchPortion, isExactMatch) for pid in pids]
     ret = {}
     for i in range(len(pids)):
         if mappingResults[i] is not None:

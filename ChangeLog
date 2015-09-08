@@ -1,7 +1,7 @@
-* 2.0.0 (prerelease)  - Sep 4 2015
+* 2.0.1 - Sep 8 2015
 - Fix typo in method, getProcessess -> getProcesses. Old typod name will also work but only for one release.
 - Add functions for getting process owner by pid (getProcessOwner, getProcessOwnerStr)
 - Add functions for getting commandline by pid (getProcessCommandLineStr, getProcessCommandLineList)
 - Add functions for scanning for an open file descriptor, (scanProcessForOpenFile - for single process) and (scanAllProcessesForOpenFile - for all processes)
+- Add support for searching for either exact matches or partial matches (instead of always partial)
 
-# TODO: update READMEs, update setup.py
