@@ -5,11 +5,13 @@ from setuptools import setup
 
 if __name__ == '__main__':
 
+    summary = 'Python module for scanning information on running processes, including mappings, open file-descriptors, process owner, and other information'
     try:
-        with open('README.rst', 'r') as f:
+        with open('README.rst', 'rt') as f:
             long_description = f.read()
-    except:
-        long_description = ''
+    except Exception as e:
+        sys.stderr.write('Got exception reading long description: %s\n' %(str(e),))
+        long_description = summary
 
     setup(name='ProcessMappingScanner',
             version='2.0.1',
@@ -19,7 +21,7 @@ if __name__ == '__main__':
             packages=['ProcessMappingScanner'],
             url='https://github.com/kata198/ProcessMappingScanner',
             maintainer_email='kata198@gmail.com',
-            description='Python module for scanning information on running processes, including mappings, open file-descriptors, process owner, and other information',
+            description=summary,
             long_description=long_description,
             license='LGPLv3',
             keywords=['process', 'mapping', 'scanner', 'unix', 'proc', 'mappings', 'lib', 'detect', 'executable', 'shared', 'object', 'fd', 'filename', 'search', 'socket', 'descriptor', 'owner', 'pids'],
