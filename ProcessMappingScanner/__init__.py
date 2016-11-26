@@ -8,9 +8,6 @@
 
 
 import os
-import time
-import traceback
-import getpass
 import pwd
 import sys
 
@@ -146,23 +143,17 @@ def scanProcessForMapping(pid, searchPortion, isExactMatch=False, ignoreCase=Fal
                 isMatch = lambda searchFor, searchIn : bool(searchFor == searchIn)
             else:
                 isMatch = lambda searchFor, searchIn : bool(searchFor.lower() == searchIn.lower())
-                
-
-            for line in lines:
-                portion = ' '.join(line.split(' ')[5:]).lstrip()
-                if isMatch(searchPortion, portion):
-                    matchedMappings.append('\t' + line)
         else:
-
             if ignoreCase is False:
                 isMatch = lambda searchFor, searchIn : bool(searchFor in searchIn)
             else:
                 isMatch = lambda searchFor, searchIn : bool(searchFor.lower() in searchIn.lower())
+                
 
-            for line in lines:
-                if isMatch(searchPortion, line):
-                    matchedMappings.append('\t' + line)
-
+        for line in lines:
+            portion = ' '.join(line.split(' ')[5:]).lstrip()
+            if isMatch(searchPortion, portion):
+                matchedMappings.append('\t' + line)
 
         if len(matchedMappings) == 0:
             return None
@@ -251,27 +242,20 @@ def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True, ignoreCase=Fal
                 isMatch = lambda searchFor, totalPath : bool(searchFor == totalPath)
             else:
                 isMatch = lambda searchFor, totalPath : bool(searchFor.lower() == totalPath.lower())
-
-            for fd in processFDs:
-                fdPath = os.readlink(prefixDir + '/' + fd)
-
-                if isMatch(searchPortion, fdPath):
-                    matchedFDs.append(fd)
-                    matchedFilenames.append(fdPath)
-
         else:
-
             if ignoreCase is False:
                 isMatch = lambda searchFor, totalPath : bool(searchFor in totalPath)
             else:
                 isMatch = lambda searchFor, totalPath : bool(searchFor.lower() in totalPath.lower())
+            
 
+        for fd in processFDs:
+            fdPath = os.readlink(prefixDir + '/' + fd)
 
-            for fd in processFDs:
-                fdPath = os.readlink(prefixDir + '/' + fd)
-                if isMatch(searchPortion, fdPath):
-                    matchedFDs.append(fd)
-                    matchedFilenames.append(fdPath)
+            if isMatch(searchPortion, fdPath):
+                matchedFDs.append(fd)
+                matchedFilenames.append(fdPath)
+
 
         if len(matchedFDs) == 0:
             return None
