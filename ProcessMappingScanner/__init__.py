@@ -108,13 +108,14 @@ def getAllRunningPids():
     return [int(x) for x in os.listdir('/proc') if x.isdigit()]
 
         
-def scanProcessForMapping(pid, searchPortion, isExactMatch=False):
+def scanProcessForMapping(pid, searchPortion, isExactMatch=False, ignoreCase=False):
     '''
         scanProcessForMapping - Searches a given pid's mappings for a certain pattern.
 
             @param pid <int> - A running process ID on this system
             @param searchPortion <str> - A mapping for which to search, example: libc or python or libz.so.1. Give empty string to return all mappings.
             @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default False.
+            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
             @return <dict> - If result is found, the following dict is returned. If no match found on the given pid, or pid is not found running, None is returned.
                 {
@@ -140,13 +141,26 @@ def scanProcessForMapping(pid, searchPortion, isExactMatch=False):
         matchedMappings = []
     
         if isExactMatch is True:
+
+            if ignoreCase is False:
+                isMatch = lambda searchFor, searchIn : bool(searchFor == searchIn)
+            else:
+                isMatch = lambda searchFor, searchIn : bool(searchFor.lower() == searchIn.lower())
+                
+
             for line in lines:
                 portion = ' '.join(line.split(' ')[5:]).lstrip()
-                if searchPortion == portion:
+                if isMatch(searchPortion, portion):
                     matchedMappings.append('\t' + line)
         else:
+
+            if ignoreCase is False:
+                isMatch = lambda searchFor, searchIn : bool(searchFor in searchIn)
+            else:
+                isMatch = lambda searchFor, searchIn : bool(searchFor.lower() in searchIn.lower())
+
             for line in lines:
-                if searchPortion in line:
+                if isMatch(searchPortion, line):
                     matchedMappings.append('\t' + line)
 
 
@@ -174,19 +188,20 @@ def scanProcessForMapping(pid, searchPortion, isExactMatch=False):
         return None
 
 
-def scanAllProcessesForMapping(searchPortion, isExactMatch=False):
+def scanAllProcessesForMapping(searchPortion, isExactMatch=False, ignoreCase=False):
     '''
         scanAllProcessesForMapping - Scans all processes on the system for a given search pattern.
 
             @param searchPortion <str> - A mapping for which to search, example: libc or python or libz.so.1. Give empty string to return all mappings.
             @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed.
+            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
         @return - <dict> - A dictionary of pid -> mappingResults for each pid that matched the search pattern. For format of "mappingResults", @see scanProcessForMapping
     '''
     pids = getAllRunningPids()
 
     # Since processes could disappear, we run the scan as fast as possible here with a list comprehension, then assemble the return dictionary later.
-    mappingResults = [scanProcessForMapping(pid, searchPortion, isExactMatch) for pid in pids]
+    mappingResults = [scanProcessForMapping(pid, searchPortion, isExactMatch, ignoreCase) for pid in pids]
     ret = {}
     for i in range(len(pids)):
         if mappingResults[i] is not None:
@@ -194,15 +209,17 @@ def scanAllProcessesForMapping(searchPortion, isExactMatch=False):
 
     return ret
 
-scanAllProcessessForMapping = scanAllProcessesForMapping # Backwards compat with typo, will be kept for one release.       
+#  REMOVED in 2.1.0 - Uncomment to restore typo compat.
+# scanAllProcessessForMapping = scanAllProcessesForMapping # Backwards compat with typo, will be kept for one release.       
 
 
-def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True):
+def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True, ignoreCase=False):
     '''
         scanProcessForOpenFile - Scans open FDs for a given pid to see if any are the provided searchPortion
 
             @param searchPortion <str> - Filename to check
             @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default True.
+            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
         @return -  If result is found, the following dict is returned. If no match found on the given pid, or the pid is not found running, None is returned.
                 {
@@ -229,15 +246,30 @@ def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True):
         matchedFilenames = []
 
         if isExactMatch is True:
+
+            if ignoreCase is False:
+                isMatch = lambda searchFor, totalPath : bool(searchFor == totalPath)
+            else:
+                isMatch = lambda searchFor, totalPath : bool(searchFor.lower() == totalPath.lower())
+
             for fd in processFDs:
                 fdPath = os.readlink(prefixDir + '/' + fd)
-                if searchPortion == fdPath:
+
+                if isMatch(searchPortion, fdPath):
                     matchedFDs.append(fd)
                     matchedFilenames.append(fdPath)
+
         else:
+
+            if ignoreCase is False:
+                isMatch = lambda searchFor, totalPath : bool(searchFor in totalPath)
+            else:
+                isMatch = lambda searchFor, totalPath : bool(searchFor.lower() in totalPath.lower())
+
+
             for fd in processFDs:
                 fdPath = os.readlink(prefixDir + '/' + fd)
-                if searchPortion in fdPath:
+                if isMatch(searchPortion, fdPath):
                     matchedFDs.append(fd)
                     matchedFilenames.append(fdPath)
 
@@ -268,19 +300,20 @@ def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True):
         return None
 
 
-def scanAllProcessesForOpenFile(searchPortion, isExactMatch=True):
+def scanAllProcessesForOpenFile(searchPortion, isExactMatch=True, ignoreCase=False):
     '''
         scanAllProcessessForOpenFile - Scans all processes on the system for a given filename
 
             @param searchPortion <str> - Filename to check
             @param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default True.
+            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
         @return - <dict> - A dictionary of pid -> mappingResults for each pid that matched the search pattern. For format of "mappingResults", @see scanProcessForOpenFile
     '''
     pids = getAllRunningPids()
 
     # Since processes could disappear, we run the scan as fast as possible here with a list comprehension, then assemble the return dictionary later.
-    mappingResults = [scanProcessForOpenFile(pid, searchPortion, isExactMatch) for pid in pids]
+    mappingResults = [scanProcessForOpenFile(pid, searchPortion, isExactMatch, ignoreCase) for pid in pids]
     ret = {}
     for i in range(len(pids)):
         if mappingResults[i] is not None:
