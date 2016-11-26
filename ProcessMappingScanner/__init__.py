@@ -1,4 +1,4 @@
-# Copyright (c) 2015 Tim Savannah under terms of the Lesser General GNU Public License Version 3 ( LGPLv3 )
+# Copyright (c) 2015, 2016 Tim Savannah under terms of the Lesser General GNU Public License Version 3 ( LGPLv3 )
 # You should have received a copy of the license as LICENSE with this distribution. It contains the full license
 #
 # This module contains methods designed to work under UNIX to determine various information associated with processes.
@@ -17,8 +17,8 @@ except:
     FileNotFoundError = IOError
     PermissionError = IOError
 
-__version__ = '2.0.2'
-__version_tuple__ = (2, 0, 2)
+__version__ = '2.1.0'
+__version_tuple__ = (2, 1, 0)
 
 def getProcessOwner(pid):
     '''

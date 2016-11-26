@@ -1,4 +1,10 @@
-* 2.0.2 - Oct 19 2015
+* 2.1.0 - Nov 25 2016
+- Add option to search ignoring case (Default off)
+- Remove typo "getProcessess" [extra s] compat method.
+- Cleanup and simplify some
+- Add pydoc
+
+*2.0.2 - Oct 19 2015
 - Fixup description
 
 * 2.0.1 - Sep 8 2015
