@@ -23,13 +23,14 @@ Here are functions to scan running processes for mappings.
 
 The following function, scanProcessForMapping, scans a single process for mappings. Use an empty string for searchPortion to get all mappings.
 
-	def scanProcessForMapping(pid, searchPortion, isExactMatch=False):
+	def scanProcessForMapping(pid, searchPortion, isExactMatch=False, ignoreCase=False):
 		'''
 			scanProcessForMapping - Searches a given pid's mappings for a certain pattern.
 
 				@param pid <int> - A running process ID on this system
 				@param searchPortion <str> - A mapping for which to search, example: libc or python or libz.so.1. Give empty string to return all mappings.
-				@param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default False.
+				@param isExactMatch <bool> Default False - If match should be exact, otherwise a partial match is performed.
+				@param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
 				@return <dict> - If result is found, the following dict is returned. If no match found on the given pid, or pid is not found running, None is returned.
 					{
@@ -45,12 +46,13 @@ The following function, scanProcessForMapping, scans a single process for mappin
 
 The following function, scanAllProcessesForMapping, scans all running processes for mappings.
 
-	def scanAllProcessesForMapping(searchPortion, isExactMatch=False):
+	def scanAllProcessesForMapping(searchPortion, isExactMatch=False, ignoreCase=False):
 		'''
 			scanAllProcessesForMapping - Scans all processes on the system for a given search pattern.
 
 				@param searchPortion <str> - A mapping for which to search, example: libc or python or libz.so.1. Give empty string to return all mappings.
-				@param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed.
+				@param isExactMatch <bool> Default False - If match should be exact, otherwise a partial match is performed.
+				@param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
 			@return - <dict> - A dictionary of pid -> mappingResults for each pid that matched the search pattern. For format of "mappingResults", @see scanProcessForMapping
 		'''
@@ -126,12 +128,13 @@ The following functions deal with open file descriptors (fds) of running process
 The following function returns information on a process 
 
 
-	def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True):
+	def scanProcessForOpenFile(pid, searchPortion, isExactMatch=True, ignoreCase=False):
 		'''
 			scanProcessForOpenFile - Scans open FDs for a given pid to see if any are the provided searchPortion
 
 				@param searchPortion <str> - Filename to check
-				@param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default True.
+				@param isExactMatch <bool> Default True - If match should be exact, otherwise a partial match is performed.
+				@param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
 			@return -  If result is found, the following dict is returned. If no match found on the given pid, or the pid is not found running, None is returned.
 					{
@@ -146,12 +149,13 @@ The following function returns information on a process
 
 The following function scans all processes on a system for an open file:
 
-	def scanAllProcessesForOpenFile(searchPortion, isExactMatch=True):
+	def scanAllProcessesForOpenFile(searchPortion, isExactMatch=True, ignoreCase=False):
 		'''
 			scanAllProcessessForOpenFile - Scans all processes on the system for a given filename
 
 				@param searchPortion <str> - Filename to check
-				@param isExactMatch <bool> - If match should be exact, otherwise a partial match is performed. Default True.
+				@param isExactMatch <bool> Default True - If match should be exact, otherwise a partial match is performed.
+				@param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
 			@return - <dict> - A dictionary of pid -> mappingResults for each pid that matched the search pattern. For format of "mappingResults", @see scanProcessForOpenFile
 		'''
