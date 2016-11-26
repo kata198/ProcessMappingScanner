@@ -1,3 +1,9 @@
+* 2.1.2 - Nov 25 2016
+- Third one in a row is lucky.
+- Update READMEs to note new params
+- Always list default next to type in docstring
+- Regen docstrings
+
 * 2.1.1 - Nov 25 2016
 - Document getAllRunningPids and regen pydocs
 
