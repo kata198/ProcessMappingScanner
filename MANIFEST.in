@@ -1,6 +1,8 @@
 include setup.py
-recursive-include ProcessMappingScanner *
 include LICENSE
 include README.md
 include README.rst
+include MANIFEST.in
 include .gitignore
+recursive-include doc *.html
+recursive-include ProcessMappingScanner *.py
