@@ -17,8 +17,8 @@ except:
     FileNotFoundError = IOError
     PermissionError = IOError
 
-__version__ = '2.1.0'
-__version_tuple__ = (2, 1, 0)
+__version__ = '2.1.1'
+__version_tuple__ = (2, 1, 1)
 
 def getProcessOwner(pid):
     '''
@@ -102,6 +102,11 @@ def getProcessCommandLineList(pid):
 
 
 def getAllRunningPids():
+    '''
+        getAllRunningPids - Gets list of all pids that are running on a given system
+
+        @return <list<int>> - A list of pids (process IDs).
+    '''
     return [int(x) for x in os.listdir('/proc') if x.isdigit()]
 
         

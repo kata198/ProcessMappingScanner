@@ -1,6 +1,7 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html><head><title>Python: package ProcessMappingScanner</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
 </head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
@@ -9,7 +10,7 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>ProcessMappingScanner</strong></big></big> (version 2.1.0)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href="ProcessMappingScanner.html">index</a></font></td></tr></table>
-    <p><tt>#&nbsp;Copyright&nbsp;(c)&nbsp;2015&nbsp;Tim&nbsp;Savannah&nbsp;under&nbsp;terms&nbsp;of&nbsp;the&nbsp;Lesser&nbsp;General&nbsp;GNU&nbsp;Public&nbsp;License&nbsp;Version&nbsp;3&nbsp;(&nbsp;LGPLv3&nbsp;)<br>
+    <p><tt>#&nbsp;Copyright&nbsp;(c)&nbsp;2015,&nbsp;2016&nbsp;Tim&nbsp;Savannah&nbsp;under&nbsp;terms&nbsp;of&nbsp;the&nbsp;Lesser&nbsp;General&nbsp;GNU&nbsp;Public&nbsp;License&nbsp;Version&nbsp;3&nbsp;(&nbsp;LGPLv3&nbsp;)<br>
 #&nbsp;You&nbsp;should&nbsp;have&nbsp;received&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;license&nbsp;as&nbsp;LICENSE&nbsp;with&nbsp;this&nbsp;distribution.&nbsp;It&nbsp;contains&nbsp;the&nbsp;full&nbsp;license<br>
 #<br>
 #&nbsp;This&nbsp;module&nbsp;contains&nbsp;methods&nbsp;designed&nbsp;to&nbsp;work&nbsp;under&nbsp;UNIX&nbsp;to&nbsp;determine&nbsp;various&nbsp;information&nbsp;associated&nbsp;with&nbsp;processes.<br>
@@ -28,7 +29,9 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-getAllRunningPids"><strong>getAllRunningPids</strong></a>()</dt></dl>
+<td width="100%"><dl><dt><a name="-getAllRunningPids"><strong>getAllRunningPids</strong></a>()</dt><dd><tt>getAllRunningPids&nbsp;-&nbsp;Gets&nbsp;list&nbsp;of&nbsp;all&nbsp;pids&nbsp;that&nbsp;are&nbsp;running&nbsp;on&nbsp;a&nbsp;given&nbsp;system<br>
+&nbsp;<br>
+@return&nbsp;&lt;list&lt;int&gt;&gt;&nbsp;-&nbsp;A&nbsp;list&nbsp;of&nbsp;pids&nbsp;(process&nbsp;IDs).</tt></dd></dl>
  <dl><dt><a name="-getProcessCommandLineList"><strong>getProcessCommandLineList</strong></a>(pid)</dt><dd><tt>getProcessCommandLineList&nbsp;-&nbsp;Gets&nbsp;the&nbsp;commandline&nbsp;(program&nbsp;+&nbsp;argumentS)&nbsp;of&nbsp;a&nbsp;given&nbsp;pid&nbsp;as&nbsp;a&nbsp;list.<br>
 &nbsp;<br>
 @param&nbsp;pid&nbsp;&lt;int&gt;&nbsp;-&nbsp;Process&nbsp;ID<br>
@@ -55,21 +58,21 @@
  <dl><dt><a name="-getProcessOwnerStr"><strong>getProcessOwnerStr</strong></a>(pid)</dt><dd><tt>getProcessOwner&nbsp;-&nbsp;Get&nbsp;Process&nbsp;owner&nbsp;of&nbsp;a&nbsp;pid&nbsp;as&nbsp;a&nbsp;string&nbsp;instead&nbsp;of&nbsp;components&nbsp;(#getProcessOwner)<br>
 &nbsp;<br>
 @return&nbsp;-&nbsp;Returns&nbsp;username&nbsp;if&nbsp;it&nbsp;can&nbsp;be&nbsp;determined,&nbsp;otherwise&nbsp;uid,&nbsp;otherwise&nbsp;"unknown"</tt></dd></dl>
- <dl><dt><a name="-scanAllProcessesForMapping"><strong>scanAllProcessesForMapping</strong></a>(searchPortion, isExactMatch=False, ignoreCase=False)</dt><dd><tt>scanAllProcessesForMapping&nbsp;-&nbsp;Scans&nbsp;all&nbsp;processes&nbsp;on&nbsp;the&nbsp;system&nbsp;for&nbsp;a&nbsp;given&nbsp;search&nbsp;pattern.<br>
+ <dl><dt><a name="-scanAllProcessesForMapping"><strong>scanAllProcessesForMapping</strong></a>(searchPortion, isExactMatch<font color="#909090">=False</font>, ignoreCase<font color="#909090">=False</font>)</dt><dd><tt>scanAllProcessesForMapping&nbsp;-&nbsp;Scans&nbsp;all&nbsp;processes&nbsp;on&nbsp;the&nbsp;system&nbsp;for&nbsp;a&nbsp;given&nbsp;search&nbsp;pattern.<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;searchPortion&nbsp;&lt;str&gt;&nbsp;-&nbsp;A&nbsp;mapping&nbsp;for&nbsp;which&nbsp;to&nbsp;search,&nbsp;example:&nbsp;libc&nbsp;or&nbsp;python&nbsp;or&nbsp;libz.so.1.&nbsp;Give&nbsp;empty&nbsp;string&nbsp;to&nbsp;return&nbsp;all&nbsp;mappings.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;isExactMatch&nbsp;&lt;bool&gt;&nbsp;-&nbsp;If&nbsp;match&nbsp;should&nbsp;be&nbsp;exact,&nbsp;otherwise&nbsp;a&nbsp;partial&nbsp;match&nbsp;is&nbsp;performed.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;ignoreCase&nbsp;&lt;bool&gt;&nbsp;Default&nbsp;False&nbsp;-&nbsp;If&nbsp;True,&nbsp;search&nbsp;will&nbsp;be&nbsp;performed&nbsp;case-insensitively<br>
 &nbsp;<br>
 @return&nbsp;-&nbsp;&lt;dict&gt;&nbsp;-&nbsp;A&nbsp;dictionary&nbsp;of&nbsp;pid&nbsp;-&gt;&nbsp;mappingResults&nbsp;for&nbsp;each&nbsp;pid&nbsp;that&nbsp;matched&nbsp;the&nbsp;search&nbsp;pattern.&nbsp;For&nbsp;format&nbsp;of&nbsp;"mappingResults",&nbsp;@see&nbsp;scanProcessForMapping</tt></dd></dl>
- <dl><dt><a name="-scanAllProcessesForOpenFile"><strong>scanAllProcessesForOpenFile</strong></a>(searchPortion, isExactMatch=True, ignoreCase=False)</dt><dd><tt>scanAllProcessessForOpenFile&nbsp;-&nbsp;Scans&nbsp;all&nbsp;processes&nbsp;on&nbsp;the&nbsp;system&nbsp;for&nbsp;a&nbsp;given&nbsp;filename<br>
+ <dl><dt><a name="-scanAllProcessesForOpenFile"><strong>scanAllProcessesForOpenFile</strong></a>(searchPortion, isExactMatch<font color="#909090">=True</font>, ignoreCase<font color="#909090">=False</font>)</dt><dd><tt>scanAllProcessessForOpenFile&nbsp;-&nbsp;Scans&nbsp;all&nbsp;processes&nbsp;on&nbsp;the&nbsp;system&nbsp;for&nbsp;a&nbsp;given&nbsp;filename<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;searchPortion&nbsp;&lt;str&gt;&nbsp;-&nbsp;Filename&nbsp;to&nbsp;check<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;isExactMatch&nbsp;&lt;bool&gt;&nbsp;-&nbsp;If&nbsp;match&nbsp;should&nbsp;be&nbsp;exact,&nbsp;otherwise&nbsp;a&nbsp;partial&nbsp;match&nbsp;is&nbsp;performed.&nbsp;Default&nbsp;True.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;ignoreCase&nbsp;&lt;bool&gt;&nbsp;Default&nbsp;False&nbsp;-&nbsp;If&nbsp;True,&nbsp;search&nbsp;will&nbsp;be&nbsp;performed&nbsp;case-insensitively<br>
 &nbsp;<br>
 @return&nbsp;-&nbsp;&lt;dict&gt;&nbsp;-&nbsp;A&nbsp;dictionary&nbsp;of&nbsp;pid&nbsp;-&gt;&nbsp;mappingResults&nbsp;for&nbsp;each&nbsp;pid&nbsp;that&nbsp;matched&nbsp;the&nbsp;search&nbsp;pattern.&nbsp;For&nbsp;format&nbsp;of&nbsp;"mappingResults",&nbsp;@see&nbsp;scanProcessForOpenFile</tt></dd></dl>
- <dl><dt><a name="-scanProcessForMapping"><strong>scanProcessForMapping</strong></a>(pid, searchPortion, isExactMatch=False, ignoreCase=False)</dt><dd><tt>scanProcessForMapping&nbsp;-&nbsp;Searches&nbsp;a&nbsp;given&nbsp;pid's&nbsp;mappings&nbsp;for&nbsp;a&nbsp;certain&nbsp;pattern.<br>
+ <dl><dt><a name="-scanProcessForMapping"><strong>scanProcessForMapping</strong></a>(pid, searchPortion, isExactMatch<font color="#909090">=False</font>, ignoreCase<font color="#909090">=False</font>)</dt><dd><tt>scanProcessForMapping&nbsp;-&nbsp;Searches&nbsp;a&nbsp;given&nbsp;pid's&nbsp;mappings&nbsp;for&nbsp;a&nbsp;certain&nbsp;pattern.<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;pid&nbsp;&lt;int&gt;&nbsp;-&nbsp;A&nbsp;running&nbsp;process&nbsp;ID&nbsp;on&nbsp;this&nbsp;system<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;searchPortion&nbsp;&lt;str&gt;&nbsp;-&nbsp;A&nbsp;mapping&nbsp;for&nbsp;which&nbsp;to&nbsp;search,&nbsp;example:&nbsp;libc&nbsp;or&nbsp;python&nbsp;or&nbsp;libz.so.1.&nbsp;Give&nbsp;empty&nbsp;string&nbsp;to&nbsp;return&nbsp;all&nbsp;mappings.<br>
@@ -84,7 +87,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'cmdline'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Commandline&nbsp;string<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'matchedMappings'&nbsp;:&nbsp;All&nbsp;mappings&nbsp;likes&nbsp;that&nbsp;matched&nbsp;the&nbsp;given&nbsp;search&nbsp;pattern<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</tt></dd></dl>
- <dl><dt><a name="-scanProcessForOpenFile"><strong>scanProcessForOpenFile</strong></a>(pid, searchPortion, isExactMatch=True, ignoreCase=False)</dt><dd><tt>scanProcessForOpenFile&nbsp;-&nbsp;Scans&nbsp;open&nbsp;FDs&nbsp;for&nbsp;a&nbsp;given&nbsp;pid&nbsp;to&nbsp;see&nbsp;if&nbsp;any&nbsp;are&nbsp;the&nbsp;provided&nbsp;searchPortion<br>
+ <dl><dt><a name="-scanProcessForOpenFile"><strong>scanProcessForOpenFile</strong></a>(pid, searchPortion, isExactMatch<font color="#909090">=True</font>, ignoreCase<font color="#909090">=False</font>)</dt><dd><tt>scanProcessForOpenFile&nbsp;-&nbsp;Scans&nbsp;open&nbsp;FDs&nbsp;for&nbsp;a&nbsp;given&nbsp;pid&nbsp;to&nbsp;see&nbsp;if&nbsp;any&nbsp;are&nbsp;the&nbsp;provided&nbsp;searchPortion<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;searchPortion&nbsp;&lt;str&gt;&nbsp;-&nbsp;Filename&nbsp;to&nbsp;check<br>
 &nbsp;&nbsp;&nbsp;&nbsp;@param&nbsp;isExactMatch&nbsp;&lt;bool&gt;&nbsp;-&nbsp;If&nbsp;match&nbsp;should&nbsp;be&nbsp;exact,&nbsp;otherwise&nbsp;a&nbsp;partial&nbsp;match&nbsp;is&nbsp;performed.&nbsp;Default&nbsp;True.<br>
@@ -106,5 +109,6 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>__version_tuple__</strong> = (2, 1, 0)</td></tr></table>
+<td width="100%"><strong>__version__</strong> = '2.1.0'<br>
+<strong>__version_tuple__</strong> = (2, 1, 0)</td></tr></table>
 </body></html>
