@@ -14,6 +14,13 @@ A mapping can include the running executable (like python), a shared library (li
 You can use this module to, for example, scan for running processes to see what is using libpython2.7, or scan a paticular process for a mapping.
 
 
+Commandline Tool
+----------------
+
+ProcessMappingScanner's functionality is exposed through a commandline tool, `findProcessesUsing <https://github.com/kata198/findProcessesUsing>`_.
+
+
+
 Functions
 ---------
 
