@@ -1,3 +1,6 @@
+* 2.2.2 - Jun 11 2017
+- Add scan functions for cwd
+
 * 2.2.1 - Jun 11 2017
 - Add getProcessCwd method to determine CWD of a process
 
