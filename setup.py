@@ -14,7 +14,7 @@ if __name__ == '__main__':
         long_description = summary
 
     setup(name='ProcessMappingScanner',
-            version='2.2.2',
+            version='2.3.1',
             author='Tim Savannah',
             author_email='kata198@gmail.com',
             maintainer='Tim Savannah',
