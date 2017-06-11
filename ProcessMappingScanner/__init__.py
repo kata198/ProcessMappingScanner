@@ -127,7 +127,94 @@ def getAllRunningPids():
     '''
     return [int(x) for x in os.listdir('/proc') if x.isdigit()]
 
-        
+
+def scanProcessForCwd(pid, searchPortion, isExactMatch=False, ignoreCase=False):
+    '''
+        scanProcessForCwd - Searches a given pid's cwd for a given pattern
+
+            @param pid <int> - A running process ID on this system
+            @param searchPortion <str> - Any portion of directory to search
+            @param isExactMatch <bool> Default False - If match should be exact, otherwise a partial match is performed.
+            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
+
+            @return <dict> - If result is found, the following dict is returned. If no match found on the given pid, or pid is not found running, None is returned.
+                {
+                    'searchPortion' : The passed search pattern
+                    'pid'           : The passed pid (as an integer)
+                    'owner'         : String of process owner, or uid if no mapping can be found, or "unknown" if neither could be determined.
+                    'cmdline'       : Commandline string
+                    'cwd'           : The exact cwd of matched process
+                }
+    '''
+    try:   
+        try:
+            pid = int(pid)
+        except ValueError as e:
+            sys.stderr.write('Expected an integer, got %s for pid.\n' %(str(type(pid)),))
+            raise e
+            
+
+        cwd = getProcessCwd(pid)
+        if not cwd:
+            return None
+
+        isMatch = False
+        if isExactMatch is True:
+            if searchPortion == cwd:
+                isMatch = True
+            else:
+                if searchPortion.endswith('/') and searchPortion[:-1] == cwd:
+                    isMatch = True
+        else:
+            if searchPortion in cwd:
+                isMatch = True
+            else:
+                if searchPortion.endswith('/') and searchPortion[:-1] in cwd:
+                    isMatch = True
+
+        if not isMatch:
+            return None
+
+        cmdline = getProcessCommandLineStr(pid)
+        owner   = getProcessOwnerStr(pid)
+
+        return {
+            'searchPortion' : searchPortion,
+            'pid'           : pid,
+            'owner'         : owner,
+            'cmdline'       : cmdline,
+            'cwd'           : cwd,
+        }
+    except OSError:
+        return None
+    except IOError:
+        return None
+    except FileNotFoundError:
+        return None
+    except PermissionError:
+        return None
+
+def scanAllProcessesForCwd(searchPortion, isExactMatch=False, ignoreCase=False):
+    '''
+        scanAllProcessesForCwd - Scans all processes on the system for a given search pattern.
+
+            @param searchPortion <str> - Any portion of directory to search
+            @param isExactMatch <bool> Default False - If match should be exact, otherwise a partial match is performed.
+            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
+
+        @return - <dict> - A dictionary of pid -> cwdResults for each pid that matched the search pattern. For format of "cwdResults", @see scanProcessForCwd
+    '''
+    
+    pids = getAllRunningPids()
+
+    cwdResults = [scanProcessForCwd(pid, searchPortion, isExactMatch, ignoreCase) for pid in pids]
+    ret = {}
+    for i in range(len(pids)):
+        if cwdResults[i] is not None:
+            ret[pids[i]] = cwdResults[i]
+
+    return ret
+
 def scanProcessForMapping(pid, searchPortion, isExactMatch=False, ignoreCase=False):
     '''
         scanProcessForMapping - Searches a given pid's mappings for a certain pattern.
@@ -327,5 +414,4 @@ def scanAllProcessesForOpenFile(searchPortion, isExactMatch=True, ignoreCase=Fal
             ret[pids[i]] = mappingResults[i]
 
     return ret
-
 
