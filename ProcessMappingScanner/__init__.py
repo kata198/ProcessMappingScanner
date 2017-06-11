@@ -205,7 +205,7 @@ def scanAllProcessesForCwd(searchPortion, isExactMatch=False):
     
     pids = getAllRunningPids()
 
-    cwdResults = [scanProcessForCwd(pid, searchPortion, isExactMatch, ignoreCase) for pid in pids]
+    cwdResults = [scanProcessForCwd(pid, searchPortion, isExactMatch) for pid in pids]
     ret = {}
     for i in range(len(pids)):
         if cwdResults[i] is not None:
