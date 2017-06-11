@@ -128,14 +128,13 @@ def getAllRunningPids():
     return [int(x) for x in os.listdir('/proc') if x.isdigit()]
 
 
-def scanProcessForCwd(pid, searchPortion, isExactMatch=False, ignoreCase=False):
+def scanProcessForCwd(pid, searchPortion, isExactMatch=False):
     '''
         scanProcessForCwd - Searches a given pid's cwd for a given pattern
 
             @param pid <int> - A running process ID on this system
             @param searchPortion <str> - Any portion of directory to search
             @param isExactMatch <bool> Default False - If match should be exact, otherwise a partial match is performed.
-            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
             @return <dict> - If result is found, the following dict is returned. If no match found on the given pid, or pid is not found running, None is returned.
                 {
@@ -194,13 +193,12 @@ def scanProcessForCwd(pid, searchPortion, isExactMatch=False, ignoreCase=False):
     except PermissionError:
         return None
 
-def scanAllProcessesForCwd(searchPortion, isExactMatch=False, ignoreCase=False):
+def scanAllProcessesForCwd(searchPortion, isExactMatch=False):
     '''
         scanAllProcessesForCwd - Scans all processes on the system for a given search pattern.
 
             @param searchPortion <str> - Any portion of directory to search
             @param isExactMatch <bool> Default False - If match should be exact, otherwise a partial match is performed.
-            @param ignoreCase <bool> Default False - If True, search will be performed case-insensitively
 
         @return - <dict> - A dictionary of pid -> cwdResults for each pid that matched the search pattern. For format of "cwdResults", @see scanProcessForCwd
     '''
