@@ -17,8 +17,8 @@ except:
     FileNotFoundError = IOError
     PermissionError = IOError
 
-__version__ = '2.1.2'
-__version_tuple__ = (2, 1, 2)
+__version__ = '2.2.0'
+__version_tuple__ = (2, 2, 0)
 
 __all__ = ("getProcessOwner", "getProcessOwnerStr", "getProcessCommandLineStr", "getProcessCommandLineList", "getProcessCwd", "getAllRunningPids", "scanProcessForMapping", "scanAllProcessesForMapping", "scanProcessForOpenFile", "scanAllProcessesForOpenFile" )
 
