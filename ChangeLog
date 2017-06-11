@@ -1,6 +1,6 @@
-* 2.3.1 - Jun 11 2017
+* 2.3.2 - Jun 11 2017
 - Remove "ignoreCase" from cwd functions
-- Bump to 2.3.1 to match findProcessesUsing version
+- Bump to 2.3.2 to match findProcessesUsing version
 
 * 2.2.2 - Jun 11 2017
 - Add scan functions for cwd
