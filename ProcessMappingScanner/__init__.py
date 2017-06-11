@@ -101,6 +101,22 @@ def getProcessCommandLineList(pid):
         return None
 
 
+def getProcessCwd(pid):
+    '''
+        getProcessCwd - Gets the cwd (current working directory) of a given pid
+
+        @param pid <int> - Process ID
+
+        @return <str/None> - None if process not found or can't be determined. Otherwise, a string of the CWD
+    '''
+    try:
+        cwd = os.readlink('/proc/%d/cwd' %(int(pid), ))
+
+        return cwd
+    except:
+        return None
+        
+
 def getAllRunningPids():
     '''
         getAllRunningPids - Gets list of all pids that are running on a given system
