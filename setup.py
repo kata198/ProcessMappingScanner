@@ -24,7 +24,7 @@ if __name__ == '__main__':
             description=summary,
             long_description=long_description,
             license='LGPLv3',
-            keywords=['process', 'mapping', 'scanner', 'unix', 'proc', 'mappings', 'lib', 'detect', 'executable', 'shared', 'object', 'fd', 'filename', 'search', 'socket', 'descriptor', 'owner', 'pids'],
+            keywords=['process', 'mapping', 'scanner', 'unix', 'proc', 'mappings', 'lib', 'detect', 'executable', 'shared', 'object', 'fd', 'filename', 'search', 'socket', 'descriptor', 'owner', 'pids', 'cwd'],
             classifiers=['Development Status :: 5 - Production/Stable',
                          'Programming Language :: Python',
                          'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
@@ -34,6 +34,8 @@ if __name__ == '__main__':
                           'Programming Language :: Python :: 3',
                           'Programming Language :: Python :: 3.3',
                           'Programming Language :: Python :: 3.4',
+                          'Programming Language :: Python :: 3.5',
+                          'Programming Language :: Python :: 3.6',
             ]
     )
 
