@@ -1,4 +1,4 @@
-# Copyright (c) 2015, 2016 Tim Savannah under terms of the Lesser General GNU Public License Version 3 ( LGPLv3 )
+# Copyright (c) 2015, 2016, 2017 Tim Savannah under terms of the Lesser General GNU Public License Version 3 ( LGPLv3 )
 # You should have received a copy of the license as LICENSE with this distribution. It contains the full license
 #
 # This module contains methods designed to work under UNIX to determine various information associated with processes.
@@ -19,6 +19,8 @@ except:
 
 __version__ = '2.1.2'
 __version_tuple__ = (2, 1, 2)
+
+__all__ = ("getProcessOwner", "getProcessOwnerStr", "getProcessCommandLineStr", "getProcessCommandLineList", "getProcessCwd", "getAllRunningPids", "scanProcessForMapping", "scanAllProcessesForMapping", "scanProcessForOpenFile", "scanAllProcessesForOpenFile" )
 
 def getProcessOwner(pid):
     '''
