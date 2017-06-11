@@ -1,3 +1,7 @@
+* 2.2.0 - Jun 11 2017
+- Add getProcessCwd method to determine CWD of a process
+
+
 * 2.1.2 - Nov 25 2016
 - Third one in a row is lucky.
 - Update READMEs to note new params

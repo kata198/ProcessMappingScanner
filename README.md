@@ -166,6 +166,22 @@ The following function scans all processes on a system for an open file:
 			@return - <dict> - A dictionary of pid -> mappingResults for each pid that matched the search pattern. For format of "mappingResults", @see scanProcessForOpenFile
 		'''
 
+
+Current Working Directory
+-------------------------
+
+The current working directory (CWD) of a process can be found via:
+
+	def getProcessCwd(pid)
+	'''
+		getProcessCwd - Gets the cwd (current working directory) of a given pid
+
+		@param pid <int> - Process ID
+
+		@return <str/None> - None if process not found or can't be determined. Otherwise, a string of the CWD
+	'''
+
+
 General
 -------
 
