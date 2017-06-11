@@ -182,6 +182,9 @@ The current working directory (CWD) of a process can be found via:
 	'''
 
 
+Also contains scan functions, like those described above, *scanProcessForCwd* and *scanAllProcessessForCwd*.
+
+
 General
 -------
 
