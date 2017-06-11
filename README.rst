@@ -280,3 +280,9 @@ The following function returns a list of all pids running on a system
 
 
 All of the "scan" series of functions return some extra information about the process (owner/cmdline). This is because processes can begin and end quickly, so it's better to get a complete snapshot than to not be able to obtain one later.
+
+
+Pydoc
+=====
+
+Pydoc can be found at: http://pythonhosted.org/ProcessMappingScanner/
